@@ -2,6 +2,7 @@ package com.test.unlimitedproduction.weathercity
 
 import android.app.Application
 import com.test.unlimitedproduction.weathercity.di.AppComponent
+import com.test.unlimitedproduction.weathercity.di.DaggerAppComponent
 
 class App: Application() {
     companion object {
@@ -9,19 +10,10 @@ class App: Application() {
             private set
     }
 
-    lateinit var appComponent: AppComponent
-        private set
-
+    val appComponent: AppComponent = DaggerAppComponent.create()
 
     override fun onCreate() {
         super.onCreate()
         instance = this
-        initComponent()
-    }
-
-    private fun initComponent() {
-//        appComponent = DaggerAppComponent.builder()
-//            .build()
-//        appComponent.inject(this)
     }
 }

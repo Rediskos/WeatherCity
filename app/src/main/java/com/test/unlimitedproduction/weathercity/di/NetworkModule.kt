@@ -34,7 +34,7 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideGson() = GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
+    fun provideGson() = GsonBuilder().create()
 
     @Singleton
     @Provides

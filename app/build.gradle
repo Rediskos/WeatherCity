@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 def localProperties = new Properties()
@@ -19,7 +20,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        buildConfigField("String", "BASE_URL", "\"https://api.openweathermap.org/data/2.5/weather\"")
+        buildConfigField("String", "BASE_URL", "\"https://api.openweathermap.org/data/2.5/\"")
         buildConfigField("String", "API_KEY", localProperties['apiKey'])
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

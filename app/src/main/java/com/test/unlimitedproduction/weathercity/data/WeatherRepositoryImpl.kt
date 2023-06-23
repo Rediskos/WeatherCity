@@ -11,7 +11,12 @@ import kotlinx.coroutines.flow.flow
 class WeatherRepositoryImpl(private val api: WeatherApi): WeatherRepository {
     override suspend fun getWeather(): Flow<WeatherModel> {
         return flow {
-            emit(api.getWeather("London", BuildConfig.API_KEY).mapToDomain())
+            val response = api.getWeather("London", BuildConfig.API_KEY)
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    emit(it.mapToDomain())
+                }
+            }
         }
     }
 }
