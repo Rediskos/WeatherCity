@@ -20,9 +20,16 @@ class WeatherViewModel @Inject constructor(val repository: WeatherRepository) : 
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.getWeather().collect {
+            repository.getWeatherInformer().collect {
                 _currentWeatherData.emit(it)
             }
+        }
+        checkWeather()
+    }
+
+    private fun checkWeather() {
+        viewModelScope.launch(Dispatchers.IO){
+            repository.weatherForCity(WeatherDataHelper.currentCity)
         }
     }
 }

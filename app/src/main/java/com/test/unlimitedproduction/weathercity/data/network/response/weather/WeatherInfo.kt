@@ -1,6 +1,7 @@
 package com.test.unlimitedproduction.weathercity.data.network.response.weather
 
 import com.google.gson.annotations.SerializedName
+import com.test.unlimitedproduction.weathercity.data.db.CityCash
 import com.test.unlimitedproduction.weathercity.domain.model.WeatherModel
 
 data class WeatherInfo(
@@ -11,3 +12,4 @@ data class WeatherInfo(
 )
 
 fun WeatherInfo.mapToDomain() = WeatherModel(temp = main.temp, wind = wind.speed, humidity = main.humidity, city = name)
+fun WeatherInfo.mapToDataBase() = CityCash(city = name, temp = main.temp, wind = wind.speed, humidity = main.humidity)

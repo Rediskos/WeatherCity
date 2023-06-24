@@ -33,7 +33,7 @@ class CitySearchViewModel @Inject constructor(
 
     fun newCity(city: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            weatherRepository.newCity(city)
+            weatherRepository.weatherForCity(city)
         }
     }
 

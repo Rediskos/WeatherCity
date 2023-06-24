@@ -10,7 +10,7 @@ class App: Application() {
             private set
     }
 
-    val appComponent: AppComponent = DaggerAppComponent.create()
+    val appComponent: AppComponent = DaggerAppComponent.factory().create(this)
 
     override fun onCreate() {
         super.onCreate()

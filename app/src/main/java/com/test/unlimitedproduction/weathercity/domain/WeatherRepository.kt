@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 
 interface WeatherRepository {
-    suspend fun getWeather() : StateFlow<WeatherModel?>
+    suspend fun getWeatherInformer() : StateFlow<WeatherModel?>
 
-    suspend fun newCity(city: String)
+    suspend fun weatherForCity(city: String)
 }

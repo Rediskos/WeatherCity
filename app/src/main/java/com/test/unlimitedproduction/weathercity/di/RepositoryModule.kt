@@ -2,6 +2,7 @@ package com.test.unlimitedproduction.weathercity.di
 
 import com.test.unlimitedproduction.weathercity.data.CityRepositoryImpl
 import com.test.unlimitedproduction.weathercity.data.WeatherRepositoryImpl
+import com.test.unlimitedproduction.weathercity.data.db.CityCashDataBase
 import com.test.unlimitedproduction.weathercity.data.network.CityApi
 import com.test.unlimitedproduction.weathercity.data.network.WeatherApi
 import com.test.unlimitedproduction.weathercity.domain.CityRepository
@@ -15,9 +16,9 @@ class RepositoryModule {
 
     @Singleton
     @Provides
-    fun WeatherRepository(api: WeatherApi):WeatherRepository = WeatherRepositoryImpl(api)
+    fun WeatherRepository(api: WeatherApi, dataBase: CityCashDataBase):WeatherRepository = WeatherRepositoryImpl(api, dataBase)
 
     @Singleton
     @Provides
-    fun CityRepository(api: CityApi): CityRepository = CityRepositoryImpl(api)
+    fun CityRepository(api: CityApi, dataBase: CityCashDataBase): CityRepository = CityRepositoryImpl(api, dataBase)
 }
