@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.test.unlimitedproduction.weathercity.App
 import com.test.unlimitedproduction.weathercity.R
 import com.test.unlimitedproduction.weathercity.databinding.FragmentWeatherBinding
@@ -39,6 +40,9 @@ class WeatherFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.ibSearchCity.setOnClickListener {
+            findNavController().navigate(WeatherFragmentDirections.actionWeatherFragmentToCityFragment())
+        }
         initListeners()
     }
 
@@ -49,6 +53,7 @@ class WeatherFragment : Fragment() {
                     tvTemperatureHolder.text = it?.temp.toString()
                     tvHumidityHolder.text = it?.humidity.toString()
                     tvWindHolder.text = it?.wind.toString()
+                    tvCityName.text = it?.city
                 }
             }
         }

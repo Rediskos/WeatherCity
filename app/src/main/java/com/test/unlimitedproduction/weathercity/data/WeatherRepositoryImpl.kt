@@ -1,21 +1,28 @@
 package com.test.unlimitedproduction.weathercity.data
 
-import com.test.unlimitedproduction.weathercity.BuildConfig
 import com.test.unlimitedproduction.weathercity.data.network.WeatherApi
-import com.test.unlimitedproduction.weathercity.data.network.response.mapToDomain
+import com.test.unlimitedproduction.weathercity.data.network.response.weather.mapToDomain
 import com.test.unlimitedproduction.weathercity.domain.WeatherRepository
 import com.test.unlimitedproduction.weathercity.domain.model.WeatherModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import com.test.unlimitedproduction.weathercity.utils.WeatherDataHelper
+import kotlinx.coroutines.flow.StateFlow
 
 class WeatherRepositoryImpl(private val api: WeatherApi): WeatherRepository {
-    override suspend fun getWeather(): Flow<WeatherModel> {
-        return flow {
-            val response = api.getWeather("London", BuildConfig.API_KEY)
-            if (response.isSuccessful) {
-                response.body()?.let {
-                    emit(it.mapToDomain())
-                }
+    override suspend fun getWeather(): StateFlow<WeatherModel?> {
+        val response = api.getWeather(WeatherDataHelper.currentCity)
+        if (response.isSuccessful) {
+            response.body()?.let {
+                WeatherDataHelper.newWeatherData(it.mapToDomain())
+            }
+        }
+        return WeatherDataHelper.getCurrentWeatherData()
+    }
+
+    override suspend fun newCity(city: String) {
+        val response = api.getWeather(city)
+        if (response.isSuccessful) {
+            response.body()?.let {
+                WeatherDataHelper.newWeatherData(it.mapToDomain())
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.test.unlimitedproduction.weathercity.data.network.response
+package com.test.unlimitedproduction.weathercity.data.network.response.weather
 
 data class Weather(
     val description: String,

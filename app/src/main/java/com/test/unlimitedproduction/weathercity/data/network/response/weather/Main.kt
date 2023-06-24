@@ -1,4 +1,4 @@
-package com.test.unlimitedproduction.weathercity.data.network.response
+package com.test.unlimitedproduction.weathercity.data.network.response.weather
 
 import com.google.gson.annotations.SerializedName
 

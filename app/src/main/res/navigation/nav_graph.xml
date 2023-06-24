@@ -8,5 +8,13 @@
     <fragment
         android:id="@+id/weatherFragment"
         android:name="com.test.unlimitedproduction.weathercity.ui.weather.WeatherFragment"
-        android:label="WeatherFragment" />
+        android:label="WeatherFragment" >
+        <action
+            android:id="@+id/action_weatherFragment_to_cityFragment"
+            app:destination="@id/cityFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cityFragment"
+        android:name="com.test.unlimitedproduction.weathercity.ui.search.CityFragment"
+        android:label="CityFragment" />
 </navigation>

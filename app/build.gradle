@@ -22,6 +22,8 @@ android {
 
         buildConfigField("String", "BASE_URL", "\"https://api.openweathermap.org/data/2.5/\"")
         buildConfigField("String", "API_KEY", localProperties['apiKey'])
+        buildConfigField("String", "CITY_API_KEY", "\"Cd5ez9MnDOwuBPc//pO9hA==b5LttQsD3v2alCuI\"")
+        buildConfigField("String", "CITY_BASE_URL", "\"https://api.api-ninjas.com/v1/\"")
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -55,6 +57,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
+    implementation 'androidx.recyclerview:recyclerview:1.3.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
