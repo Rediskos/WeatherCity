@@ -12,5 +12,18 @@ data class WeatherInfo(
 )
 
 fun WeatherInfo.mapToDomain(isFavorite: Boolean) =
-    WeatherModel(temp = main.temp, wind = wind.speed, humidity = main.humidity, city = name, isFavorite = isFavorite)
-fun WeatherInfo.mapToDataBase() = CityCash(city = name, temp = main.temp, wind = wind.speed, humidity = main.humidity)
+    WeatherModel(
+        temp = main.temp,
+        wind = wind.speed,
+        humidity = main.humidity,
+        city = name,
+        isFavorite = isFavorite,
+        icon = weather.first().icon
+    )
+fun WeatherInfo.mapToDataBase() = CityCash(
+    city = name,
+    temp = main.temp,
+    wind = wind.speed,
+    humidity = main.humidity,
+    weatherIcon = weather.first().icon
+)

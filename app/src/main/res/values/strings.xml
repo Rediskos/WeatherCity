@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">WeatherCity</string>
+    <string name="weather_icon_blueprint_url">https://openweathermap.org/img/wn/%1$s@2x.png</string>
 </resources>

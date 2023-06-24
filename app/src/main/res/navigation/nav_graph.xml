@@ -12,9 +12,16 @@
         <action
             android:id="@+id/action_weatherFragment_to_cityFragment"
             app:destination="@id/cityFragment" />
+        <action
+            android:id="@+id/action_weatherFragment_to_favoriteFragment"
+            app:destination="@id/favoriteFragment" />
     </fragment>
     <fragment
         android:id="@+id/cityFragment"
         android:name="com.test.unlimitedproduction.weathercity.ui.search.CityFragment"
         android:label="CityFragment" />
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="com.test.unlimitedproduction.weathercity.ui.favorite.FavoriteFragment"
+        android:label="FavoriteFragment" />
 </navigation>

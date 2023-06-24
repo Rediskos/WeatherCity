@@ -58,8 +58,8 @@ class CityFragment : Fragment() {
             viewModel.newCity(city)
             findNavController().popBackStack()
         },
-        onSetCityFavoriteClickListener = {
-
+        onSetCityFavoriteClickListener = { city, isFavorite ->
+            viewModel.setCityFavorite(city, isFavorite)
         }
     )
 
@@ -78,7 +78,7 @@ class CityFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.etCityForSearch.addTextChangedListener(cityInputListener)
-        binding.rvParkingPhotosCurrent.adapter = cityItemAdapter
+        binding.rvCityList.adapter = cityItemAdapter
         lifecycleScope.launch {
             viewModel.currentListOfCityData.collectLatest {
                 cityItemAdapter.submitList(it ?: listOf())

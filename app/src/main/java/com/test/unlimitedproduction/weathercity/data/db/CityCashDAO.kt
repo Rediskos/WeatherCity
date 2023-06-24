@@ -17,6 +17,9 @@ interface CityCashDAO {
     @Query("SELECT isFavorite FROM CityCash WHERE city = :name")
     fun isCityFavorite(name: String): Boolean
 
+    @Query("SELECT * FROM CityCash WHERE isFavorite = 1")
+    fun getAllFavorite(): List<CityCash>
+
     @Query("UPDATE CityCash SET isFavorite = :isFavorite WHERE city = :name")
     fun setCityFavoriteState(name: String, isFavorite: Boolean)
 }

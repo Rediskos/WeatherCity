@@ -8,6 +8,7 @@ import com.test.unlimitedproduction.weathercity.data.network.response.weather.ma
 import com.test.unlimitedproduction.weathercity.data.network.response.weather.mapToDomain
 import com.test.unlimitedproduction.weathercity.domain.WeatherRepository
 import com.test.unlimitedproduction.weathercity.domain.model.WeatherModel
+import com.test.unlimitedproduction.weathercity.utils.EventHelper
 import com.test.unlimitedproduction.weathercity.utils.WeatherDataHelper
 import kotlinx.coroutines.flow.StateFlow
 
@@ -27,6 +28,7 @@ class WeatherRepositoryImpl(private val api: WeatherApi, private val db: CityCas
     }
 
     override suspend fun weatherForCity(city: String) {
+        EventHelper.showLoader()
         checkWeatherInCash(city)
         val response = api.getWeather(city)
         if (response.isSuccessful) {
@@ -40,6 +42,7 @@ class WeatherRepositoryImpl(private val api: WeatherApi, private val db: CityCas
                 cashData(it)
             }
         }
+        EventHelper.hideLoader()
     }
 
     override suspend fun cashDataForCity(city: String) {

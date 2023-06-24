@@ -7,4 +7,6 @@ interface CityRepository {
 
     suspend fun isCityFavorite(name: String): Boolean
     suspend fun setCityFavoriteState(name: String, isFavorite: Boolean)
+
+    suspend fun getAllFavorite(): List<CityModel>
 }

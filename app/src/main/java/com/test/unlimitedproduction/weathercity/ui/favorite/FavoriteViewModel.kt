@@ -1,39 +1,39 @@
-package com.test.unlimitedproduction.weathercity.ui.search
+package com.test.unlimitedproduction.weathercity.ui.favorite
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.test.unlimitedproduction.weathercity.domain.CityRepository
 import com.test.unlimitedproduction.weathercity.domain.WeatherRepository
 import com.test.unlimitedproduction.weathercity.domain.model.CityModel
-import com.test.unlimitedproduction.weathercity.utils.EventHelper
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class CitySearchViewModel @Inject constructor(
-    private val cityRepository: CityRepository, private val weatherRepository: WeatherRepository): ViewModel(){
-    fun onInputChanged(name: String) {
-        findCitiesByName(name)
-    }
-
+class FavoriteViewModel @Inject constructor(
+    private val cityRepository: CityRepository,
+    private val weatherRepository: WeatherRepository
+    ): ViewModel() {
     private val _currentListOfCityData: MutableStateFlow<List<CityModel>?> = MutableStateFlow(null)
     val currentListOfCityData: StateFlow<List<CityModel>?>
         get() = _currentListOfCityData
+    init {
+        getAllFavorite()
+    }
 
-    private fun findCitiesByName(name: String) {
+    fun getAllFavorite() {
         viewModelScope.launch(Dispatchers.IO) {
-            _currentListOfCityData.emit(cityRepository.searchCityByName(name))
+            cityRepository.getAllFavorite().let { _currentListOfCityData.emit(it) }
         }
     }
+
     fun setCityFavorite(name: String, isFavorite: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             cityRepository.setCityFavoriteState(name, isFavorite)
+            getAllFavorite()
         }
     }
-
     fun newCity(city: String) {
         viewModelScope.launch(Dispatchers.IO) {
             weatherRepository.weatherForCity(city)

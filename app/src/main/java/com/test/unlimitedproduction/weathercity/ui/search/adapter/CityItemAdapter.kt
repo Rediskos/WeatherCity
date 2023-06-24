@@ -42,6 +42,10 @@ class CityItemAdapter(
             tvCityName.setOnClickListener {
                 onCityClickListener(city.name)
             }
+            cbIsCityFavorite.isChecked = city.isFavorite
+            cbIsCityFavorite.setOnCheckedChangeListener { _, isFavorite ->
+                onSetCityFavoriteClickListener(city.name, isFavorite)
+            }
             //TODO checkbox
         }
     }

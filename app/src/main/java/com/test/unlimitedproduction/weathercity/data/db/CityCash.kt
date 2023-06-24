@@ -11,7 +11,8 @@ data class CityCash(
     val temp: Double,
     val wind: Double,
     val humidity: Int,
-    val isFavorite: Boolean = false
+    val isFavorite: Boolean = false,
+    val weatherIcon: String
 )
 
 fun CityCash.mapToDomain() = WeatherModel(
@@ -19,5 +20,6 @@ fun CityCash.mapToDomain() = WeatherModel(
     wind = wind,
     humidity = humidity,
     city = city,
-    isFavorite = isFavorite
+    isFavorite = isFavorite,
+    icon = weatherIcon
 )

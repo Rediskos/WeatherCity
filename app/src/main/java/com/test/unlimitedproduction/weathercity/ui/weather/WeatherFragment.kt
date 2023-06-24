@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.test.unlimitedproduction.weathercity.App
 import com.test.unlimitedproduction.weathercity.R
 import com.test.unlimitedproduction.weathercity.databinding.FragmentWeatherBinding
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val DEFAULT_WEATHER_ICON = "10n"
 class WeatherFragment : Fragment() {
 
     @Inject lateinit var viewModel: WeatherViewModel
@@ -44,6 +46,9 @@ class WeatherFragment : Fragment() {
         binding.ibSearchCity.setOnClickListener {
             findNavController().navigate(WeatherFragmentDirections.actionWeatherFragmentToCityFragment())
         }
+        binding.ibFavoriteList.setOnClickListener {
+            findNavController().navigate(WeatherFragmentDirections.actionWeatherFragmentToFavoriteFragment())
+        }
         initListeners()
     }
 
@@ -63,6 +68,9 @@ class WeatherFragment : Fragment() {
                             }
                         }
                     }
+                    Glide.with(this@WeatherFragment)
+                        .load(getString(R.string.weather_icon_blueprint_url, it?.icon ?: DEFAULT_WEATHER_ICON))
+                        .into(ivWeatherIcon)
                 }
             }
         }

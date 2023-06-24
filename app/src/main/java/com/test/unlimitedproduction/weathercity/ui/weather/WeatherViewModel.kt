@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.test.unlimitedproduction.weathercity.domain.CityRepository
 import com.test.unlimitedproduction.weathercity.domain.WeatherRepository
 import com.test.unlimitedproduction.weathercity.domain.model.WeatherModel
+import com.test.unlimitedproduction.weathercity.utils.EventHelper
 import com.test.unlimitedproduction.weathercity.utils.WeatherDataHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

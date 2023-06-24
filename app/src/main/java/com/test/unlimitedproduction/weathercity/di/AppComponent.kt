@@ -3,6 +3,7 @@ package com.test.unlimitedproduction.weathercity.di
 import android.content.Context
 import com.test.unlimitedproduction.weathercity.App
 import com.test.unlimitedproduction.weathercity.ui.MainActivity
+import com.test.unlimitedproduction.weathercity.ui.favorite.FavoriteFragment
 import com.test.unlimitedproduction.weathercity.ui.search.CityFragment
 import com.test.unlimitedproduction.weathercity.ui.weather.WeatherFragment
 import dagger.BindsInstance
@@ -20,4 +21,5 @@ interface AppComponent {
     fun inject(activity: MainActivity)
     fun inject(fragment: WeatherFragment)
     fun inject(fragment: CityFragment)
+    fun inject(fragment: FavoriteFragment)
 }

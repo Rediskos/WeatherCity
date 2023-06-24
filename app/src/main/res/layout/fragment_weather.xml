@@ -5,6 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/iv_weather_icon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toTopOf="@id/tv_city_name"
+        app:layout_constraintStart_toStartOf="@id/tv_city_name"
+        app:layout_constraintEnd_toEndOf="@id/tv_city_name"/>
+
     <TextView
         android:id="@+id/tv_city_name"
         android:layout_width="wrap_content"
@@ -106,6 +114,7 @@
             android:button="@null" />
 
         <ImageButton
+            android:id="@+id/ib_favorite_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_favorite_list"/>

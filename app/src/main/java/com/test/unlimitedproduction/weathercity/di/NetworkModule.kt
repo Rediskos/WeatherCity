@@ -5,8 +5,10 @@ import com.google.gson.GsonBuilder
 import com.test.unlimitedproduction.weathercity.BuildConfig
 import com.test.unlimitedproduction.weathercity.data.network.CityApi
 import com.test.unlimitedproduction.weathercity.data.network.WeatherApi
+import com.test.unlimitedproduction.weathercity.utils.EventHelper
 import dagger.Module
 import dagger.Provides
+import okhttp3.EventListener
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
