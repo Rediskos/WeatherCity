@@ -1,6 +1,5 @@
 package com.test.unlimitedproduction.weathercity.data
 
-import android.util.Log
 import com.test.unlimitedproduction.weathercity.data.db.CityCashDataBase
 import com.test.unlimitedproduction.weathercity.data.db.mapToDomain
 import com.test.unlimitedproduction.weathercity.data.network.WeatherApi
@@ -10,10 +9,7 @@ import com.test.unlimitedproduction.weathercity.data.network.response.weather.ma
 import com.test.unlimitedproduction.weathercity.domain.WeatherRepository
 import com.test.unlimitedproduction.weathercity.domain.model.WeatherModel
 import com.test.unlimitedproduction.weathercity.utils.WeatherDataHelper
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 
 class WeatherRepositoryImpl(private val api: WeatherApi, private val db: CityCashDataBase) : WeatherRepository {
     override suspend fun getWeatherInformer(): StateFlow<WeatherModel?> {
@@ -35,13 +31,33 @@ class WeatherRepositoryImpl(private val api: WeatherApi, private val db: CityCas
         val response = api.getWeather(city)
         if (response.isSuccessful) {
             response.body()?.let {
-                WeatherDataHelper.newWeatherData(it.mapToDomain())
+                val isFavorite = try {
+                    db.dao.isCityFavorite(it.name)
+                } catch (e: NoSuchElementException) {
+                    false
+                }
+                WeatherDataHelper.newWeatherData(it.mapToDomain(isFavorite))
+                cashData(it)
+            }
+        }
+    }
+
+    override suspend fun cashDataForCity(city: String) {
+        val response = api.getWeather(city)
+        if (response.isSuccessful) {
+            response.body()?.let {
                 cashData(it)
             }
         }
     }
 
     private suspend fun cashData(weatherInfo: WeatherInfo) {
-        db.dao.upsertCash(weatherInfo.mapToDataBase())
+        //todo find better way to work with db
+        try {
+            val cashIsFavorite = db.dao.isCityFavorite(weatherInfo.name)
+            db.dao.upsertCash(weatherInfo.mapToDataBase().copy(isFavorite = cashIsFavorite))
+        } catch (e: NoSuchElementException) {
+            db.dao.upsertCash(weatherInfo.mapToDataBase())
+        }
     }
 }

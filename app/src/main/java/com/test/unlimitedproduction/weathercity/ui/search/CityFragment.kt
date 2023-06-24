@@ -53,10 +53,15 @@ class CityFragment : Fragment() {
 
     @Inject
     lateinit var viewModel: CitySearchViewModel
-    private val cityItemAdapter = CityItemAdapter { city ->
-        viewModel.newCity(city)
-        findNavController().popBackStack()
-    }
+    private val cityItemAdapter = CityItemAdapter (
+        onCityClickListener = { city ->
+            viewModel.newCity(city)
+            findNavController().popBackStack()
+        },
+        onSetCityFavoriteClickListener = {
+
+        }
+    )
 
     override fun onAttach(context: Context) {
         App.instance.appComponent.inject(this)

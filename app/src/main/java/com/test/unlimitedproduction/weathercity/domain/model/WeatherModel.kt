@@ -4,5 +4,6 @@ data class WeatherModel(
     val temp: Double,
     val wind: Double,
     val humidity: Int,
-    val city: String
+    val city: String,
+    val isFavorite: Boolean
 )

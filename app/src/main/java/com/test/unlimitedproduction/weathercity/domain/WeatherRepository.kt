@@ -9,4 +9,6 @@ interface WeatherRepository {
     suspend fun getWeatherInformer() : StateFlow<WeatherModel?>
 
     suspend fun weatherForCity(city: String)
+
+    suspend fun cashDataForCity(city: String)
 }

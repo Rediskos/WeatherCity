@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.test.unlimitedproduction.weathercity.App
 import com.test.unlimitedproduction.weathercity.R
 import com.test.unlimitedproduction.weathercity.databinding.FragmentWeatherBinding
+import com.test.unlimitedproduction.weathercity.utils.WeatherDataHelper
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -54,6 +55,14 @@ class WeatherFragment : Fragment() {
                     tvHumidityHolder.text = it?.humidity.toString()
                     tvWindHolder.text = it?.wind.toString()
                     tvCityName.text = it?.city
+                    cbIsCityFavorite.apply {
+                        isChecked = it?.isFavorite ?: false
+                        setOnCheckedChangeListener { _, isFavorite ->
+                            it?.city?.let {
+                                viewModel.setCityIsFavoriteState(it, isFavorite)
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -16,4 +16,14 @@ class CityRepositoryImpl(private val api: CityApi, private val db: CityCashDataB
             null
         }
     }
+
+    override suspend fun isCityFavorite(name: String): Boolean {
+        return db.dao.isCityFavorite(name)
+    }
+
+    override suspend fun setCityFavoriteState(name: String, isFavorite: Boolean) {
+        db.dao.setCityFavoriteState(name, isFavorite)
+    }
+
+
 }

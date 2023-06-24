@@ -11,5 +11,6 @@ data class WeatherInfo(
     @SerializedName("name") val name: String
 )
 
-fun WeatherInfo.mapToDomain() = WeatherModel(temp = main.temp, wind = wind.speed, humidity = main.humidity, city = name)
+fun WeatherInfo.mapToDomain(isFavorite: Boolean) =
+    WeatherModel(temp = main.temp, wind = wind.speed, humidity = main.humidity, city = name, isFavorite = isFavorite)
 fun WeatherInfo.mapToDataBase() = CityCash(city = name, temp = main.temp, wind = wind.speed, humidity = main.humidity)

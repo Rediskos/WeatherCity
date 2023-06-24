@@ -2,6 +2,7 @@ package com.test.unlimitedproduction.weathercity.ui.weather
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.test.unlimitedproduction.weathercity.domain.CityRepository
 import com.test.unlimitedproduction.weathercity.domain.WeatherRepository
 import com.test.unlimitedproduction.weathercity.domain.model.WeatherModel
 import com.test.unlimitedproduction.weathercity.utils.WeatherDataHelper
@@ -12,7 +13,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-class WeatherViewModel @Inject constructor(val repository: WeatherRepository) : ViewModel() {
+class WeatherViewModel @Inject constructor(
+        private val repository: WeatherRepository,
+        private val cityRepository: CityRepository
+    ) : ViewModel() {
 
     private val _currentWeatherData: MutableStateFlow<WeatherModel?> = MutableStateFlow(null)
     val currentWeatherData: StateFlow<WeatherModel?>
@@ -25,6 +29,12 @@ class WeatherViewModel @Inject constructor(val repository: WeatherRepository) : 
             }
         }
         checkWeather()
+    }
+
+    fun setCityIsFavoriteState(name: String, isFavorite: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            cityRepository.setCityFavoriteState(name, isFavorite)
+        }
     }
 
     private fun checkWeather() {

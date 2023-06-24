@@ -18,5 +18,6 @@ fun CityCash.mapToDomain() = WeatherModel(
     temp = temp,
     wind = wind,
     humidity = humidity,
-    city = city
+    city = city,
+    isFavorite = isFavorite
 )

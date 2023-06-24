@@ -10,7 +10,10 @@ import com.test.unlimitedproduction.weathercity.R
 import com.test.unlimitedproduction.weathercity.databinding.ItemCityBinding
 import com.test.unlimitedproduction.weathercity.domain.model.CityModel
 
-class CityItemAdapter(val onCityClickListener: (city: String) -> Unit): ListAdapter<CityModel, CityItemAdapter.CityItemViewHolder>(CityItemDiffCalc()) {
+class CityItemAdapter(
+    val onCityClickListener: (city: String) -> Unit,
+    val onSetCityFavoriteClickListener: (city: String, isFavorite: Boolean) -> Unit
+): ListAdapter<CityModel, CityItemAdapter.CityItemViewHolder>(CityItemDiffCalc()) {
     class CityItemViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val binding = ItemCityBinding.bind(view)
     }
