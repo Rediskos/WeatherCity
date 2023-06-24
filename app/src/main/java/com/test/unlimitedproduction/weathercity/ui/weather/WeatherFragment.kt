@@ -1,12 +1,16 @@
 package com.test.unlimitedproduction.weathercity.ui.weather
 
 import android.content.Context
+import android.location.Criteria
+import android.location.LocationManager
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -15,6 +19,7 @@ import com.test.unlimitedproduction.weathercity.App
 import com.test.unlimitedproduction.weathercity.R
 import com.test.unlimitedproduction.weathercity.databinding.FragmentWeatherBinding
 import com.test.unlimitedproduction.weathercity.utils.WeatherDataHelper
+import com.test.unlimitedproduction.weathercity.utils.checkLocationPermissionMissing
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -50,6 +55,32 @@ class WeatherFragment : Fragment() {
             findNavController().navigate(WeatherFragmentDirections.actionWeatherFragmentToFavoriteFragment())
         }
         initListeners()
+        if (!requireActivity().checkLocationPermissionMissing()) {
+            saveCurrentLocation()
+        } else {
+            val locationPermissionRequest = registerForActivityResult(
+                ActivityResultContracts.RequestMultiplePermissions()
+            ) { permissions ->
+                val permissionGranted = when {
+                    permissions.getOrDefault(android.Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
+                        true
+                    }
+                    permissions.getOrDefault(android.Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
+                        true
+                    }
+                    else -> {
+                        false
+                    }
+                }
+                if (permissionGranted) saveCurrentLocation()
+            }
+            locationPermissionRequest.launch(
+                arrayOf(
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        }
     }
 
     private fun initListeners() {
@@ -74,6 +105,17 @@ class WeatherFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun saveCurrentLocation() {
+        val locationManager = requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val provider = locationManager.getBestProvider(Criteria(), false)
+        if (provider != null)
+            locationManager
+                .getLastKnownLocation(provider)?.let{
+                    WeatherDataHelper.lastKnownLocation = it
+                }
+        viewModel.checkWeatherForLocation(WeatherDataHelper.lastKnownLocation)
     }
 
     override fun onDestroy() {

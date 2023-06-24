@@ -1,7 +1,9 @@
 package com.test.unlimitedproduction.weathercity.data
 
+import android.location.Location
 import com.test.unlimitedproduction.weathercity.data.db.CityCashDataBase
 import com.test.unlimitedproduction.weathercity.data.db.mapToDomain
+import com.test.unlimitedproduction.weathercity.data.network.CityApi
 import com.test.unlimitedproduction.weathercity.data.network.WeatherApi
 import com.test.unlimitedproduction.weathercity.data.network.response.weather.WeatherInfo
 import com.test.unlimitedproduction.weathercity.data.network.response.weather.mapToDataBase
@@ -12,7 +14,11 @@ import com.test.unlimitedproduction.weathercity.utils.EventHelper
 import com.test.unlimitedproduction.weathercity.utils.WeatherDataHelper
 import kotlinx.coroutines.flow.StateFlow
 
-class WeatherRepositoryImpl(private val api: WeatherApi, private val db: CityCashDataBase) : WeatherRepository {
+class WeatherRepositoryImpl(
+    private val api: WeatherApi,
+    private val db: CityCashDataBase,
+    private val cityApi: CityApi
+) : WeatherRepository {
     override suspend fun getWeatherInformer(): StateFlow<WeatherModel?> {
         return WeatherDataHelper.getCurrentWeatherData()
     }
@@ -42,6 +48,34 @@ class WeatherRepositoryImpl(private val api: WeatherApi, private val db: CityCas
                 cashData(it)
             }
         }
+        EventHelper.hideLoader()
+    }
+
+    override suspend fun weatherForLocation(location: Location) {
+        EventHelper.showLoader()
+        val lat = location.latitude
+        val lon = location.longitude
+        cityApi.getCity(
+            min_lat = lat - CityApi.COORDS_SHIFT,
+            max_lat = lat + CityApi.COORDS_SHIFT,
+            min_lon = lon - CityApi.COORDS_SHIFT,
+            max_lon = lon + CityApi.COORDS_SHIFT,
+        ).body()?.last()?.name?.let {
+            checkWeatherInCash(it)
+            val response = api.getWeather(it)
+            if (response.isSuccessful) {
+                response.body()?.let {weatherInfo ->
+                    val isFavorite = try {
+                        db.dao.isCityFavorite(weatherInfo.name)
+                    } catch (e: NoSuchElementException) {
+                        false
+                    }
+                    WeatherDataHelper.newWeatherData(weatherInfo.mapToDomain(isFavorite))
+                    cashData(weatherInfo)
+                }
+            }
+        }
+
         EventHelper.hideLoader()
     }
 

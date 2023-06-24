@@ -16,7 +16,8 @@ class RepositoryModule {
 
     @Singleton
     @Provides
-    fun WeatherRepository(api: WeatherApi, dataBase: CityCashDataBase):WeatherRepository = WeatherRepositoryImpl(api, dataBase)
+    fun WeatherRepository(api: WeatherApi, dataBase: CityCashDataBase, cityApi: CityApi):WeatherRepository
+    = WeatherRepositoryImpl(api, dataBase, cityApi)
 
     @Singleton
     @Provides

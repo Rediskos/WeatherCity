@@ -13,4 +13,12 @@ interface WeatherApi {
         @Query("appid") appId: String = BuildConfig.API_KEY,
         @Query("units") units: String = "metric"
     ) : Response<WeatherInfo>
+
+    @GET("weather")
+    suspend fun getWeather(
+        @Query("lat") lat: String,
+        @Query("lon") lon: String,
+        @Query("appid") appId: String = BuildConfig.API_KEY,
+        @Query("units") units: String = "metric"
+    ) : Response<WeatherInfo>
 }

@@ -1,5 +1,6 @@
 package com.test.unlimitedproduction.weathercity.ui.weather
 
+import android.location.Location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.test.unlimitedproduction.weathercity.domain.CityRepository
@@ -40,7 +41,14 @@ class WeatherViewModel @Inject constructor(
 
     private fun checkWeather() {
         viewModelScope.launch(Dispatchers.IO){
-            repository.weatherForCity(WeatherDataHelper.currentCity)
+            if (WeatherDataHelper.currentCity != null)
+                repository.weatherForCity(WeatherDataHelper.currentCity ?: WeatherDataHelper.DEFAULT_CITY)
+        }
+    }
+
+    fun checkWeatherForLocation(location: Location?) {
+        viewModelScope.launch(Dispatchers.IO) {
+            location?.let { repository.weatherForLocation(it) }
         }
     }
 }
