@@ -36,14 +36,19 @@ class WeatherRepositoryImpl(
     override suspend fun weatherForCity(city: String) {
         EventHelper.showLoader()
         checkWeatherInCash(city)
-        val response = api.getWeather(city)
-        if (response.isSuccessful) {
+        val response = try {
+            api.getWeather(city)
+        } catch (e: Exception) {
+            null
+        }
+        if (response?.isSuccessful == true) {
             response.body()?.let {
                 val isFavorite = try {
                     db.dao.isCityFavorite(it.name)
                 } catch (e: NoSuchElementException) {
                     false
                 }
+                WeatherDataHelper.currentCity = it.name
                 WeatherDataHelper.newWeatherData(it.mapToDomain(isFavorite))
                 cashData(it)
             }
@@ -55,16 +60,26 @@ class WeatherRepositoryImpl(
         EventHelper.showLoader()
         val lat = location.latitude
         val lon = location.longitude
-        cityApi.getCity(
-            min_lat = lat - CityApi.COORDS_SHIFT,
-            max_lat = lat + CityApi.COORDS_SHIFT,
-            min_lon = lon - CityApi.COORDS_SHIFT,
-            max_lon = lon + CityApi.COORDS_SHIFT,
-        ).body()?.last()?.name?.let {
+        val name = try {
+            cityApi.getCity(
+                min_lat = lat - CityApi.COORDS_SHIFT,
+                max_lat = lat + CityApi.COORDS_SHIFT,
+                min_lon = lon - CityApi.COORDS_SHIFT,
+                max_lon = lon + CityApi.COORDS_SHIFT,
+            ).body()?.last()?.name
+        } catch (e: Exception) {
+            null
+        }
+
+        name?.let {
             checkWeatherInCash(it)
-            val response = api.getWeather(it)
-            if (response.isSuccessful) {
-                response.body()?.let {weatherInfo ->
+            val response = try {
+                api.getWeather(it)
+            } catch (e: Exception) {
+                null
+            }
+            if (response?.isSuccessful == true) {
+                response.body()?.let { weatherInfo ->
                     val isFavorite = try {
                         db.dao.isCityFavorite(weatherInfo.name)
                     } catch (e: NoSuchElementException) {
@@ -76,12 +91,17 @@ class WeatherRepositoryImpl(
             }
         }
 
+
         EventHelper.hideLoader()
     }
 
     override suspend fun cashDataForCity(city: String) {
-        val response = api.getWeather(city)
-        if (response.isSuccessful) {
+        val response = try {
+            api.getWeather(city)
+        } catch (e: Exception) {
+            null
+        }
+        if (response?.isSuccessful == true) {
             response.body()?.let {
                 cashData(it)
             }

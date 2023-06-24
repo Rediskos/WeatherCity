@@ -20,9 +20,13 @@ class CityRepositoryImpl(
 
     override suspend fun searchCityByName(name: String): List<CityModel>? {
         EventHelper.showLoader()
-        val response = api.getCity(name)
+        val response = try {
+            api.getCity(name)
+        } catch (e: Exception) {
+            null
+        }
         EventHelper.hideLoader()
-        return if (response.isSuccessful) {
+        return if (response?.isSuccessful == true) {
             response.body()?.map { CityModel(it.name, isCityFavorite(it.name)) }
         } else {
             null
@@ -42,8 +46,12 @@ class CityRepositoryImpl(
             db.dao.setCityFavoriteState(name, isFavorite)
         } else if (isFavorite) {
             EventHelper.showLoader()
-            val response = weatherApi.getWeather(name)
-            if (response.isSuccessful) {
+            val response = try {
+                weatherApi.getWeather(name)
+            } catch (e: Exception) {
+                null
+            }
+            if (response?.isSuccessful == true) {
                 response.body()?.let {
                     cashData(it, isFavorite)
                     WeatherDataHelper.newWeatherData(it.mapToDomain(isFavorite))

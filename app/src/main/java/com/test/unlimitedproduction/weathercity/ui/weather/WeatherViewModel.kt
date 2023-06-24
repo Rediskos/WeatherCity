@@ -30,7 +30,6 @@ class WeatherViewModel @Inject constructor(
                 _currentWeatherData.emit(it)
             }
         }
-        checkWeather()
     }
 
     fun setCityIsFavoriteState(name: String, isFavorite: Boolean) {
@@ -39,16 +38,12 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-    private fun checkWeather() {
+    fun checkWeather() {
         viewModelScope.launch(Dispatchers.IO){
             if (WeatherDataHelper.currentCity != null)
                 repository.weatherForCity(WeatherDataHelper.currentCity ?: WeatherDataHelper.DEFAULT_CITY)
-        }
-    }
-
-    fun checkWeatherForLocation(location: Location?) {
-        viewModelScope.launch(Dispatchers.IO) {
-            location?.let { repository.weatherForLocation(it) }
+            else if (WeatherDataHelper.lastKnownLocation != null)
+                repository.weatherForLocation(WeatherDataHelper.lastKnownLocation!!)
         }
     }
 }

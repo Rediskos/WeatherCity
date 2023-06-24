@@ -1,5 +1,6 @@
 package com.test.unlimitedproduction.weathercity.ui.weather
 
+import android.Manifest
 import android.content.Context
 import android.location.Criteria
 import android.location.LocationManager
@@ -55,6 +56,16 @@ class WeatherFragment : Fragment() {
             findNavController().navigate(WeatherFragmentDirections.actionWeatherFragmentToFavoriteFragment())
         }
         initListeners()
+        findCurrentLocation()
+
+    }
+
+    private fun findCurrentLocation() {
+        if(WeatherDataHelper.currentCity != null) {
+            viewModel.checkWeather()
+            return
+        }
+
         if (!requireActivity().checkLocationPermissionMissing()) {
             saveCurrentLocation()
         } else {
@@ -62,12 +73,14 @@ class WeatherFragment : Fragment() {
                 ActivityResultContracts.RequestMultiplePermissions()
             ) { permissions ->
                 val permissionGranted = when {
-                    permissions.getOrDefault(android.Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
+                    permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
                         true
                     }
-                    permissions.getOrDefault(android.Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
+
+                    permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
                         true
                     }
+
                     else -> {
                         false
                     }
@@ -76,8 +89,8 @@ class WeatherFragment : Fragment() {
             }
             locationPermissionRequest.launch(
                 arrayOf(
-                    android.Manifest.permission.ACCESS_FINE_LOCATION,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
                 )
             )
         }
@@ -115,7 +128,7 @@ class WeatherFragment : Fragment() {
                 .getLastKnownLocation(provider)?.let{
                     WeatherDataHelper.lastKnownLocation = it
                 }
-        viewModel.checkWeatherForLocation(WeatherDataHelper.lastKnownLocation)
+        viewModel.checkWeather()
     }
 
     override fun onDestroy() {
