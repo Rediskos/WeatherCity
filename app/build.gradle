@@ -21,7 +21,7 @@ android {
         versionName "1.0"
 
         buildConfigField("String", "BASE_URL", "\"https://api.openweathermap.org/data/2.5/\"")
-        buildConfigField("String", "API_KEY", localProperties['apiKey'])
+        buildConfigField("String", "API_KEY", "\"761c69ecc70aed1c3e0123831790b81b\"")
         buildConfigField("String", "CITY_API_KEY", "\"Cd5ez9MnDOwuBPc//pO9hA==b5LttQsD3v2alCuI\"")
         buildConfigField("String", "CITY_BASE_URL", "\"https://api.api-ninjas.com/v1/\"")
 
