@@ -16,6 +16,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.test.unlimitedproduction.weathercity.App
 import com.test.unlimitedproduction.weathercity.R
 import com.test.unlimitedproduction.weathercity.databinding.FragmentWeatherBinding
@@ -114,6 +115,7 @@ class WeatherFragment : Fragment() {
                     }
                     Glide.with(this@WeatherFragment)
                         .load(getString(R.string.weather_icon_blueprint_url, it?.icon ?: DEFAULT_WEATHER_ICON))
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(ivWeatherIcon)
                 }
             }

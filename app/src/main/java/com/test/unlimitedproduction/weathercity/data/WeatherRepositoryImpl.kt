@@ -1,6 +1,12 @@
 package com.test.unlimitedproduction.weathercity.data
 
+import android.content.res.Resources
 import android.location.Location
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.test.unlimitedproduction.weathercity.App
+import com.test.unlimitedproduction.weathercity.R
 import com.test.unlimitedproduction.weathercity.data.db.CityCashDataBase
 import com.test.unlimitedproduction.weathercity.data.db.mapToDomain
 import com.test.unlimitedproduction.weathercity.data.network.CityApi
@@ -17,7 +23,8 @@ import kotlinx.coroutines.flow.StateFlow
 class WeatherRepositoryImpl(
     private val api: WeatherApi,
     private val db: CityCashDataBase,
-    private val cityApi: CityApi
+    private val cityApi: CityApi,
+    private val imageCasher: RequestManager
 ) : WeatherRepository {
     override suspend fun getWeatherInformer(): StateFlow<WeatherModel?> {
         return WeatherDataHelper.getCurrentWeatherData()
@@ -116,5 +123,9 @@ class WeatherRepositoryImpl(
         } catch (e: NoSuchElementException) {
             db.dao.upsertCash(weatherInfo.mapToDataBase())
         }
+        imageCasher
+            .load(App.res.getString(R.string.weather_icon_blueprint_url, weatherInfo.weather.last().icon))
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .preload()
     }
 }

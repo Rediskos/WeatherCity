@@ -1,5 +1,7 @@
 package com.test.unlimitedproduction.weathercity.di
 
+import android.content.Context
+import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.test.unlimitedproduction.weathercity.BuildConfig
@@ -112,4 +114,8 @@ class NetworkModule {
         interceptor.add(headerInterceptor)
         return interceptor
     }
+
+    @Singleton
+    @Provides
+    fun provideImageCasher(context: Context) = Glide.with(context)
 }
